@@ -1,6 +1,6 @@
 import { blueGrey } from "@material-ui/core/colors";
 
-export const Layout = ({ sideBar, children }) => {
+export const Layout = ({ children, header }) => {
   return (
     <section
       style={{
@@ -19,19 +19,10 @@ export const Layout = ({ sideBar, children }) => {
           backgroundColor: "black",
         }}
       >
-        <span
-          style={{
-            textAlign: "center",
-            fontSize: 20,
-            color: "white",
-            fontWeight: 700,
-          }}
-        >
-          管理后台
-        </span>
+        {header}
       </header>
       <section style={{ display: "flex", flex: "auto", maxHeight: "calc(100vh - 50px)" }}>
-        <aside
+        {/* <aside
           style={{
             maxWidth: 200,
             minWidth: 150,
@@ -41,7 +32,7 @@ export const Layout = ({ sideBar, children }) => {
           }}
         >
           {sideBar}
-        </aside>
+        </aside> */}
         <main style={{ flex: 1, height: "100%", overflow: "auto" }}>
           {children}
         </main>

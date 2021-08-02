@@ -2,9 +2,10 @@ import { Box, Button, Container, Stack, TextField } from "@material-ui/core";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
 import { login } from "service/login";
+// import { history } from "utils/history";
 import * as yup from "yup";
 
-export const Login = () => {
+const useForm = () => {
   const history = useHistory();
   const validationSchema = yup.object({
     username: yup.string("请输入用户名").required("请输入用户名"),
@@ -20,11 +21,16 @@ export const Login = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      const { data: token } = await login(values);
+      const token = await login(values);
       localStorage.setItem("token", token);
       history.push("/");
     },
   });
+  return formik;
+};
+
+export const Login = () => {
+  const formik = useForm();
 
   return (
     <Container>
@@ -34,7 +40,7 @@ export const Login = () => {
             style={{
               width: 600,
               display: "flex",
-              margin: '200px auto'
+              margin: "200px auto",
             }}
             spacing={2}
           >
