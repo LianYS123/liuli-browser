@@ -1,5 +1,6 @@
+/* eslint-disable no-undef */
 import { defineConfig } from "vite";
-const path = require("path");
+import path from 'path';
 import reactRefresh from "@vitejs/plugin-react-refresh";
 
 // https://vitejs.dev/config/
@@ -11,7 +12,7 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:8080",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        rewrite: (path) => path.replace(/^\/api/u, ""),
       },
     },
   },

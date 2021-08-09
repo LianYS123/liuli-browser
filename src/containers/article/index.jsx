@@ -1,101 +1,61 @@
-// import { useRequest, useTable } from "hooks";
-import { getArticles } from "service/article";
-import dayjs from "dayjs";
-import { DATE_FORMATE } from "constants/index";
-import {
-  Button,
-  Chip,
-  Container,
-  Input,
-  Link,
-  Paper,
-  Popper,
-} from "@material-ui/core";
-import { Text } from "components/Text";
-import { useFormik } from "formik";
-import { Image } from "components/Image";
-
-import ImageList from "@material-ui/core/ImageList";
-import ImageListItem from "@material-ui/core/ImageListItem";
-import ImageListItemBar from "@material-ui/core/ImageListItemBar";
-import IconButton from "@material-ui/core/IconButton";
-import InfoIcon from "@material-ui/icons/Info";
-import { useArticles, useTips } from "./hooks";
+import React, { useCallback } from "react";
+import { Button, Container, Grid } from "@material-ui/core";
+import { useArticles } from "./hooks";
+import { throttle } from "lodash";
+import ArticleItem from "./ArticleItem";
+import { Search } from "./Search";
 
 export const Article = () => {
-  const { data, isFetching, fetchNextPage, hasNextPage } = useArticles();
-  const { anchorEl, isTipShow, placement, showTipFunc, hideTip } = useTips();
+  const initialValues = {
+    keyword: "",
+    order: "time",
+    orderType: "desc",
+  };
 
-  const formik = useFormik({
-    initialValues: {
-      keyword: "",
-    },
-    onSubmit: (values) => {
-      // search(values);
-      setRequestParams(values);
-    },
-  });
-
-  console.log(data);
+  const {
+    data,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    search,
+    isFetchingNextPage,
+    requestParams,
+  } = useArticles(initialValues);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const fetchNext = useCallback(throttle(fetchNextPage, 1000), []);
+  const items =
+    data?.pages?.reduce((res, cur) => [...res, ...cur.list], []) || [];
 
   return (
-    <Container>
-      <form style={{ margin: "8px 0" }} onSubmit={formik.handleSubmit}>
-        <Input
-          type="search"
-          name="keyword"
-          value={formik.values.keyword}
-          onChange={formik.handleChange}
-        />
-        <Button type="submit">搜索</Button>
-      </form>
-      <Popper placement="top" anchorEl={anchorEl} open={isTipShow}>
-        <Paper>{placement && placement.content}</Paper>
-      </Popper>
-      {/* <ImageList rowHeight={250}>
-        {data?.pages
-          ?.reduce((res, cur) => [...res, ...cur.list], [])
-          .map((item) => {
-            const {
-              id,
-              title,
-              imgSrc,
-              time,
-              tags,
-              content,
-              ratingCount,
-              ratingScore,
-            } = item;
+    // 必须加overflow属性
+    <div
+      onScroll={(ev) => {
+        const { scrollTop, clientHeight, scrollHeight } = ev.target;
+        const isBottom = scrollTop + clientHeight > scrollHeight - 1000;
+        if (isBottom && !isFetchingNextPage && hasNextPage) {
+          fetchNext();
+        }
+      }}
+      style={{ maxHeight: "100%", overflow: "auto" }}
+    >
+      <Container>
+        <Search search={search} requestParams={requestParams} />
+        <Grid container spacing={2}>
+          {items.map((item) => {
             return (
-              <ImageListItem key={id}>
-                <Image
-                  src={imgSrc}
-                  alt={title}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-                <ImageListItemBar
-                  title={title}
-                  subtitle={
-                    <span>发布时间: {dayjs(time).format(DATE_FORMATE)}</span>
-                  }
-                  actionIcon={
-                    <IconButton onClick={showTipFunc(item)}>
-                      <InfoIcon
-                        color="white"
-                        onMouseOut={hideTip}
-                      />
-                    </IconButton>
-                  }
-                />
-              </ImageListItem>
+              <Grid key={item.id} item xs={6} md={4}>
+                <ArticleItem search={search} {...item}></ArticleItem>
+              </Grid>
             );
           })}
-      </ImageList> */}
-      {isFetching
-        ? "loading..."
-        : hasNextPage && (
-            <Button onClick={() => fetchNextPage()}>fetch more</Button>
-          )}
-    </Container>
+        </Grid>
+
+        {isFetching
+          ? "loading..."
+          : hasNextPage && (
+              <Button onClick={() => fetchNext()}>fetch more</Button>
+            )}
+      </Container>
+    </div>
   );
 };

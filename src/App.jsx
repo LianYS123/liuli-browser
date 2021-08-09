@@ -1,8 +1,13 @@
 import React from "react";
-import { Layout } from "components/Layout";
+import { Layout } from "components/layout";
 import { menu } from "config/menu";
 
-import { Route, BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import { Login } from "containers/login";
 import { routers } from "config/routers";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -16,7 +21,8 @@ const queryClient = new QueryClient({
   },
 });
 
-const Wrapper = ({ children }) => {
+const Wrapper = (props) => {
+  const { children } = props;
   return (
     <Router>
       <Switch>

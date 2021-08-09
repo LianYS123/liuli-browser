@@ -21,14 +21,16 @@ const codeMessage = {
 };
 
 const showError = (opts) => {
+  // eslint-disable-next-line no-console
   console.log(opts);
 };
 
 const jumpLogin = (response = {}) => {
   const { status } = response;
   if (status === 401 || status === 403) {
+    // eslint-disable-next-line no-console
     console.log("redirect to login");
-    location.pathname = routers.LOGIN;
+    window.location.pathname = routers.LOGIN;
     // history.push({
     //   pathname: routers.LOGIN,
     // });

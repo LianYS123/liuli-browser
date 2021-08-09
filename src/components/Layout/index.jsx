@@ -1,3 +1,4 @@
+import React from 'react';
 import { blueGrey } from "@material-ui/core/colors";
 
 export const Layout = ({ children, header }) => {

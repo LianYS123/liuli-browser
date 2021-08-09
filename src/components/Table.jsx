@@ -9,8 +9,8 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import { LoadingTableBody } from "./Loading";
-import Pagination from "./Pagination";
+import { LoadingTableBody } from "./loading";
+import Pagination from "./pagination";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
