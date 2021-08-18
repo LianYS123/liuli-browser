@@ -10,6 +10,7 @@ pipeline {
             steps {
                 sh 'npm install'
                 sh 'npm run build'
+                sh 'rm -rf /home/static/*'
                 sh 'mv ./dist/* /home/static'
             }
         }
