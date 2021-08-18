@@ -43,7 +43,7 @@ export const Article = () => {
         <Grid container spacing={2}>
           {items.map((item) => {
             return (
-              <Grid key={item.id} item xs={6} md={4}>
+              <Grid key={item.id} item xs={12} sm={6} md={4}>
                 <ArticleItem search={search} {...item}></ArticleItem>
               </Grid>
             );

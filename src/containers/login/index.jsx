@@ -38,7 +38,7 @@ export const Login = () => {
         <Box>
           <Stack
             style={{
-              width: 600,
+              width: '80vw',
               display: "flex",
               margin: "200px auto",
             }}
