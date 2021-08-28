@@ -1,5 +1,5 @@
 {
-  "name": "liuli-admin",
+  "name": "liuli-browser",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,6 +10,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/styles": "^4.11.4",
     "clsx": "^1.1.1",
+    "copy-to-clipboard": "^3.3.1",
     "dayjs": "^1.10.6",
     "formik": "^2.2.9",
     "history": "^5.0.0",
@@ -42,6 +43,8 @@
     "dev": "vite",
     "start": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "deploy": "./scripts/deploy.sh",
+    "pub": "npm run build && npm run deploy"
   }
 }

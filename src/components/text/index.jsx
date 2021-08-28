@@ -2,13 +2,14 @@ import { Typography } from "@material-ui/core";
 import { blue } from "@material-ui/core/colors";
 import { FileCopyOutlined } from "@material-ui/icons";
 import messageMounter from "components/mounter/showMessage";
+import copy from "copy-to-clipboard";
 
 // 提供限制文字长度、显示省略号、复制等功能
 export const Text = ({
   limit,
   children,
   ellipsis = true,
-  copy = false,
+  copy: canCopy = false,
   wrap = true,
 }) => {
   const copyIcon = (
@@ -19,7 +20,7 @@ export const Text = ({
         color: blue[500],
       }}
       onClick={(ev) => {
-        navigator.clipboard.writeText(children);
+        copy(children);
         messageMounter.open("复制成功");
       }}
     />
@@ -33,7 +34,7 @@ export const Text = ({
     );
     return (
       <span style={{ whiteSpace: wrap ? "normal" : "nowrap" }}>
-        {copy ? (
+        {canCopy ? (
           <>
             {contentStr} {copyIcon}
           </>
@@ -56,7 +57,7 @@ export const Text = ({
         >
           {children}
         </Typography>
-        <div>{copyIcon}</div>
+        {canCopy && <div>{copyIcon}</div>}
       </section>
     );
   } else {

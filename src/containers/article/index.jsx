@@ -10,6 +10,7 @@ export const Article = () => {
     keyword: "",
     order: "time",
     orderType: "desc",
+    cat: "all",
   };
 
   const {
@@ -28,34 +29,38 @@ export const Article = () => {
 
   return (
     // 必须加overflow属性
-    <div
-      onScroll={(ev) => {
-        const { scrollTop, clientHeight, scrollHeight } = ev.target;
-        const isBottom = scrollTop + clientHeight > scrollHeight - 1000;
-        if (isBottom && !isFetchingNextPage && hasNextPage) {
-          fetchNext();
-        }
-      }}
-      style={{ maxHeight: "100%", overflow: "auto" }}
-    >
-      <Container>
+    <div style={{ display: "flex", height: "100%", flexDirection: "column" }}>
+      <div className="search">
         <Search search={search} requestParams={requestParams} />
-        <Grid container spacing={2}>
-          {items.map((item) => {
-            return (
-              <Grid key={item.id} item xs={12} sm={6} md={4}>
-                <ArticleItem search={search} {...item}></ArticleItem>
-              </Grid>
-            );
-          })}
-        </Grid>
+      </div>
+      <div
+        onScroll={(ev) => {
+          const { scrollTop, clientHeight, scrollHeight } = ev.target;
+          const isBottom = scrollTop + clientHeight > scrollHeight - 1000;
+          if (isBottom && !isFetchingNextPage && hasNextPage) {
+            fetchNext();
+          }
+        }}
+        style={{ maxHeight: "100%", overflow: "auto", flex: 1 }}
+      >
+        <Container>
+          <Grid container spacing={2}>
+            {items.map((item) => {
+              return (
+                <Grid key={item.id} item xs={12} sm={6} md={4}>
+                  <ArticleItem search={search} {...item}></ArticleItem>
+                </Grid>
+              );
+            })}
+          </Grid>
 
-        {isFetching
-          ? "loading..."
-          : hasNextPage && (
-              <Button onClick={() => fetchNext()}>fetch more</Button>
-            )}
-      </Container>
+          {isFetching
+            ? "loading..."
+            : hasNextPage && (
+                <Button onClick={() => fetchNext()}>fetch more</Button>
+              )}
+        </Container>
+      </div>
     </div>
   );
 };

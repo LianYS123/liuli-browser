@@ -101,12 +101,6 @@ export default function ArticleItem({
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {/* <Tooltip title={ratingScore}>
-          <IconButton style={{ color: red[300] }} aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-        </Tooltip> */}
-
         <Tooltip title={ratingScore}>
           <IconButton>
             <Rating readOnly precision={0.1} value={ratingScore} />

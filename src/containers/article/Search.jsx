@@ -48,6 +48,27 @@ export const Search = ({ requestParams, search }) => {
           >
             {/* <InputLabel>排序</InputLabel> */}
             <Select
+              name="cat"
+              value={formik.values.cat}
+              onChange={formik.handleChange}
+            >
+              <MenuItem value="all">全部</MenuItem>
+              {"文章 动画 漫画 小说 音乐".split(" ").map((name) => (
+                <MenuItem key={name} value={name}>
+                  {name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={6} sm={3} md={2}>
+          <FormControl
+            style={{ marginRight: 16, width: "100%" }}
+            variant="standard"
+            size="small"
+          >
+            {/* <InputLabel>排序</InputLabel> */}
+            <Select
               name="orderType"
               value={formik.values.orderType}
               onChange={formik.handleChange}
@@ -57,6 +78,7 @@ export const Search = ({ requestParams, search }) => {
             </Select>
           </FormControl>
         </Grid>
+
         <Grid item xs={6} sm={3} md={2}>
           <FormControl
             style={{ width: "100%" }}
