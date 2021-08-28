@@ -1,12 +1,5 @@
-import React, { useEffect } from "react";
-import {
-  Button,
-  FormControl,
-  Grid,
-  Input,
-  MenuItem,
-  Select,
-} from "@material-ui/core";
+import React from "react";
+import { FormControl, Input, MenuItem, Select, Stack } from "@material-ui/core";
 import { useFormik } from "formik";
 import { useDeepCompareEffect } from "react-use";
 
@@ -14,7 +7,6 @@ export const Search = ({ requestParams, search }) => {
   const formik = useFormik({
     initialValues: requestParams,
     onSubmit: (values) => {
-      // search(values);
       search(values);
     },
   });
@@ -23,30 +15,17 @@ export const Search = ({ requestParams, search }) => {
     formik.setValues(requestParams);
   }, [requestParams]);
 
+  const { order, orderType, cat } = formik.values;
+
+  useDeepCompareEffect(() => {
+    search(formik.values);
+  }, [order, orderType, cat]);
+
   return (
     <form style={{ margin: "16px 0" }} onSubmit={formik.handleSubmit}>
-      <Grid spacing={1} container>
-        <Grid item xs={6} sm={3} md={2}>
-          <FormControl
-            style={{ marginRight: 16, width: "100%" }}
-            variant="standard"
-            size="small"
-          >
-            <Input
-              type="search"
-              name="keyword"
-              value={formik.values.keyword}
-              onChange={formik.handleChange}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item xs={6} sm={3} md={2}>
-          <FormControl
-            style={{ marginRight: 16, width: "100%" }}
-            variant="standard"
-            size="small"
-          >
-            {/* <InputLabel>排序</InputLabel> */}
+      <Stack spacing={1} direction="row">
+        <div>
+          <FormControl variant="standard" size="small">
             <Select
               name="cat"
               value={formik.values.cat}
@@ -60,14 +39,7 @@ export const Search = ({ requestParams, search }) => {
               ))}
             </Select>
           </FormControl>
-        </Grid>
-        <Grid item xs={6} sm={3} md={2}>
-          <FormControl
-            style={{ marginRight: 16, width: "100%" }}
-            variant="standard"
-            size="small"
-          >
-            {/* <InputLabel>排序</InputLabel> */}
+          <FormControl variant="standard" size="small">
             <Select
               name="orderType"
               value={formik.values.orderType}
@@ -77,15 +49,7 @@ export const Search = ({ requestParams, search }) => {
               <MenuItem value="desc">降序</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-
-        <Grid item xs={6} sm={3} md={2}>
-          <FormControl
-            style={{ width: "100%" }}
-            variant="standard"
-            size="small"
-          >
-            {/* <InputLabel>排序</InputLabel> */}
+          <FormControl variant="standard" size="small">
             <Select
               name="order"
               value={formik.values.order}
@@ -96,11 +60,18 @@ export const Search = ({ requestParams, search }) => {
               <MenuItem value="rating_count">热度</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-        <Grid item xs={6} sm={3} md={2}>
-          <Button type="submit">搜索</Button>
-        </Grid>
-      </Grid>
+        </div>
+        <FormControl variant="standard" size="small">
+          <Input
+            type="search"
+            name="keyword"
+            value={formik.values.keyword}
+            placeholder="Press Enter"
+            onChange={formik.handleChange}
+            onKeyDown={(ev) => ev.key === "Enter" && formik.handleSubmit()}
+          />
+        </FormControl>
+      </Stack>
     </form>
   );
 };

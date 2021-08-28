@@ -29,38 +29,34 @@ export const Article = () => {
 
   return (
     // 必须加overflow属性
-    <div style={{ display: "flex", height: "100%", flexDirection: "column" }}>
+    <Container
+      onScroll={(ev) => {
+        const { scrollTop, clientHeight, scrollHeight } = ev.target;
+        const isBottom = scrollTop + clientHeight > scrollHeight - 1000;
+        if (isBottom && !isFetchingNextPage && hasNextPage) {
+          fetchNext();
+        }
+      }}
+      style={{ maxHeight: "100%", overflow: "auto", flex: 1 }}
+    >
       <div className="search">
         <Search search={search} requestParams={requestParams} />
       </div>
-      <div
-        onScroll={(ev) => {
-          const { scrollTop, clientHeight, scrollHeight } = ev.target;
-          const isBottom = scrollTop + clientHeight > scrollHeight - 1000;
-          if (isBottom && !isFetchingNextPage && hasNextPage) {
-            fetchNext();
-          }
-        }}
-        style={{ maxHeight: "100%", overflow: "auto", flex: 1 }}
-      >
-        <Container>
-          <Grid container spacing={2}>
-            {items.map((item) => {
-              return (
-                <Grid key={item.id} item xs={12} sm={6} md={4}>
-                  <ArticleItem search={search} {...item}></ArticleItem>
-                </Grid>
-              );
-            })}
-          </Grid>
+      <Grid spacing={1} justifyContent='center' container>
+        {items.map((item) => {
+          return (
+            <Grid key={item.id} item sm={12} md={4} xl={3}>
+              <ArticleItem search={search} {...item}></ArticleItem>
+            </Grid>
+          );
+        })}
+      </Grid>
 
-          {isFetching
-            ? "loading..."
-            : hasNextPage && (
-                <Button onClick={() => fetchNext()}>fetch more</Button>
-              )}
-        </Container>
-      </div>
-    </div>
+      {isFetching
+        ? "loading..."
+        : hasNextPage && (
+            <Button onClick={() => fetchNext()}>fetch more</Button>
+          )}
+    </Container>
   );
 };

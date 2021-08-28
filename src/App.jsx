@@ -38,13 +38,18 @@ const App = () => {
   return (
     <Wrapper>
       <QueryClientProvider client={queryClient}>
-        <Layout header="LIULI">
+        <Switch>
+          {menu.map(({ title, component, path }) => (
+            <Route key={path} component={component} path={path} />
+          ))}
+        </Switch>
+        {/* <Layout header="LIULI">
           <Switch>
             {menu.map(({ title, component, path }) => (
               <Route key={path} component={component} path={path} />
             ))}
           </Switch>
-        </Layout>
+        </Layout> */}
       </QueryClientProvider>
     </Wrapper>
   );
